@@ -23,16 +23,23 @@ def convert_ADD(instruction: str) -> str:
         result += "0001"
         result += convert_register(instruction[0])
         result += convert_register(instruction[1])
-        result += bin(int(instruction[2]))[2:].zfill(6)
+        # negative value problems
+        if int(instruction[2]) >= 0:
+            result += bin(int(instruction[2]))[2:].zfill(6)
+        else:
+            # negative value
+            result += (6 - len(bin(int(instruction[2]))[2:])) * "1" + bin(
+                int(instruction[2])
+            )[2:]
     else:
         instruction = instruction[1].split(",")
         result += "0000"
         result += convert_register(instruction[0])
         result += convert_register(instruction[1])
         result += convert_register(instruction[2])
-        result += result.zfill(2)
+        result += "00"
     return result
 
 
 l = read_file("input.txt")
-convert_ADD(l[1])
+convert_ADD(l[0])
