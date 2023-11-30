@@ -45,10 +45,6 @@ l = read_file("input.txt")
 print(convert_ADD(l[1]))
 
 
-
-print(bin(-12))
-
-
 # It returns the length of the bit representation of the number.
 def find_max(num):
     val = 1
@@ -89,6 +85,6 @@ def generate_negative(num):
 
 
 
-print(generate_negative(-12))
+print(generate_negative(-25))
 
     
