@@ -63,51 +63,49 @@ def generate_negative(num):
     return "".join(bit_representation)
 
 
-def convert_ADD(instruction: str) -> str:
-    # split into two parts
+def convert_imm(immediate):
+    immediate_length = 6
+    result = ""
+    if int(immediate) >= 0:
+        result += bin(int(immediate))[2:].zfill(6)
+    else:
+        # negative value
+        result += (
+            immediate_length - len(generate_negative(int(immediate)))
+        ) * "1" + generate_negative(int(immediate))
+    return result
+
+
+def convert_ADD_ADDI_AND_ANDI_NAND_NOR(instruction):
+    # get the operation
     operation = get_operation(instruction)
     result = ""
-    if "I" in operation:
-        # split into three parts(registers and immediate value)
-        registers = get_registers(instruction)
+    if operation == "ADD":
+        result += "0000"
+    elif operation == "ADDI":
         result += "0001"
+    elif operation == "AND":
+        result += "0010"
+    elif operation == "ANDI":
+        result += "0011"
+    elif operation == "NAND":
+        result += "0100"
+    elif operation == "NOR":
+        result += "0101"
+
+    if "I" in operation:
+        registers = get_registers(instruction)
         result += convert_register(registers[0])
         result += convert_register(registers[1])
-        if int(registers[2]) >= 0:
-            result += bin(int(registers[2]))[2:].zfill(6)
-        else:
-            # negative value
-            result += (
-                6 - len(generate_negative(int(registers[2])))
-            ) * "1" + generate_negative(int(registers[2]))
+        result += convert_imm(registers[2])
     else:
         registers = get_registers(instruction)
-        result += "0000"
         result += convert_register(registers[0])
         result += convert_register(registers[1])
         result += convert_register(registers[2])
         result += "00"
+    # check the size
     return result
-
-
-def convert_AND(instruction: str) -> str:
-    # split into two part(operation, registers)
-    instruction = instruction.split(" ")
-    result = ""
-    if "I" in instruction[0]:
-        # split the registers and immediate value
-        pass
-    else:
-        pass
-    return result
-
-
-def convert_NAND():
-    pass
-
-
-def convert_NOR():
-    pass
 
 
 def convert_JUMP():
@@ -135,53 +133,4 @@ def convert_JB():
 
 
 l = read_file("input.txt")
-print(convert_ADD(l[1]))
-
-
-
-print(bin(-12))
-
-
-# It returns the length of the bit representation of the number.
-def find_max(num):
-    val = 1
-    num=-num
-    length=0
-    while val<num:
-        val*=2
-        length+=1
-    return length+1
-
-
-def convert_int(negative_string):
-    result=0
-    length = len(negative_string)
-    for i in range(len(negative_string)):
-        if i==0:
-            result=-pow(2, length-i-1)
-        elif negative_string[i]=="1":
-            result+=pow(2, length-i-1)
-    return result
-
-# Negative decimal to binary converter
-# For each iteration, current state of the binary number is calculated.
-# Corresponding bits are swapped through 0 and 1 for each iteration.
-def generate_negative(num):
-    length=find_max(num)
-    bit_representation="1"+"0"*(length-1)
-    bit_representation=list(bit_representation)
-    i=1
-    result=convert_int(bit_representation)
-    for i in range(len(bit_representation)):
-        if convert_int(bit_representation)<num:
-            bit_representation[i]="1"
-        elif convert_int(bit_representation)>num:
-            bit_representation[i-1]="0"
-            bit_representation[i]="1"
-    return "".join(bit_representation)
-
-
-
-print(generate_negative(-12))
-
-    
+print(convert_ADD_ADDI_AND_ANDI_NAND_NOR(l[1]))
