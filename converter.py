@@ -8,6 +8,21 @@ def read_file(path: str) -> list:
         return lines_list
 
 
+def convert_register(register: str) -> str:
+    register = register.replace("R", "")
+    register = bin(int(register))[2:]
+    register = register.zfill(4)
+    return register
+
+
+def get_operation(instruction: str):
+    return instruction.split(" ")[0]
+
+
+def get_registers(instruction: str):
+    return instruction.split(" ")[1].split(",")
+
+
 # It returns the length of the bit representation of the number.
 def find_max(num):
     val = 1
@@ -48,42 +63,43 @@ def generate_negative(num):
     return "".join(bit_representation)
 
 
-def convert_register(register: str) -> str:
-    register = register.replace("R", "")
-    register = bin(int(register))[2:]
-    register = register.zfill(4)
-    return register
-
-
 def convert_ADD(instruction: str) -> str:
     # split into two parts
-    instruction = instruction.split(" ")
+    operation = get_operation(instruction)
     result = ""
-    if "I" in instruction[0]:
+    if "I" in operation:
         # split into three parts(registers and immediate value)
-        instruction = instruction[1].split(",")
+        registers = get_registers(instruction)
         result += "0001"
-        result += convert_register(instruction[0])
-        result += convert_register(instruction[1])
-        if int(instruction[2]) >= 0:
-            result += bin(int(instruction[2]))[2:].zfill(6)
+        result += convert_register(registers[0])
+        result += convert_register(registers[1])
+        if int(registers[2]) >= 0:
+            result += bin(int(registers[2]))[2:].zfill(6)
         else:
             # negative value
             result += (
-                6 - len(generate_negative(int(instruction[2])))
-            ) * "1" + generate_negative(int(instruction[2]))
+                6 - len(generate_negative(int(registers[2])))
+            ) * "1" + generate_negative(int(registers[2]))
     else:
-        instruction = instruction[1].split(",")
+        registers = get_registers(instruction)
         result += "0000"
-        result += convert_register(instruction[0])
-        result += convert_register(instruction[1])
-        result += convert_register(instruction[2])
+        result += convert_register(registers[0])
+        result += convert_register(registers[1])
+        result += convert_register(registers[2])
         result += "00"
     return result
 
 
-def convert_AND():
-    pass
+def convert_AND(instruction: str) -> str:
+    # split into two part(operation, registers)
+    instruction = instruction.split(" ")
+    result = ""
+    if "I" in instruction[0]:
+        # split the registers and immediate value
+        pass
+    else:
+        pass
+    return result
 
 
 def convert_NAND():
