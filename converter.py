@@ -130,18 +130,36 @@ def convert_JE_JA_JB_JAE_JBE(instruction):
     return result
 
 
-def convert_JUMP():
-    pass
+def convert_LD_ST(instruction: str) -> str:
+    operation = get_operation(instruction)
+    result = ""
+    if operation == "LD":
+        result += "0111"
+    elif operation == "St":
+        result += "1000"
+
+    registers = get_registers(instruction)
+    result += convert_register(registers[0])
+    result += convert_imm(registers[1], 10)
+    return result
 
 
-def convert_ST():
-    pass
+def convert_JUMP(instruction: str) -> str:
+    result = "0110"
+    registers = get_registers(instruction)
+    result += convert_imm(registers[0], 10)
+    result += "0000"
+    return result
 
 
-def convert_CMP():
-    pass
+def convert_CMP(instruction: str) -> str:
+    result = "1001"
+    registers = get_registers(instruction)
+    # can it be immediate value??
+    result += convert_register(registers[0])
+    result += convert_register(registers[1])
+    result += "000000"
+    return result
 
 
 l = read_file("input.txt")
-print(convert_ADD_ADDI_AND_ANDI_NAND_NOR(l[1]))
-print(convert_JE_JA_JB_JAE_JBE(l[4]))
