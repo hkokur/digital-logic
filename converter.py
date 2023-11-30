@@ -76,7 +76,7 @@ def convert_imm(immediate, width):
     return result
 
 
-def convert_ADD_ADDI_AND_ANDI_NAND_NOR(instruction):
+def convert_ADD_ADDI_AND_ANDI_NAND_NOR(instruction: str) -> str:
     # get the operation
     operation = get_operation(instruction)
     result = ""
@@ -109,7 +109,7 @@ def convert_ADD_ADDI_AND_ANDI_NAND_NOR(instruction):
     return result
 
 
-def convert_JE_JA_JB_JAE_JBE(instruction):
+def convert_JE_JA_JB_JAE_JBE(instruction: str) -> str:
     operation = get_operation(instruction)
     result = ""
     # set the operation opcdoes
@@ -162,4 +162,28 @@ def convert_CMP(instruction: str) -> str:
     return result
 
 
-l = read_file("input.txt")
+output_file = open("output.txt", "w")
+output_file.write("v2.0 raw\n")
+
+for line in read_file("input.txt"):
+    line_result = ""
+    if line.startswith("A") or line.startswith("N"):
+        line_result = convert_ADD_ADDI_AND_ANDI_NAND_NOR(line)
+    elif line.startswith("J") and line != "JUMP":
+        line_result = convert_JE_JA_JB_JAE_JBE(line)
+    elif line.startswith("L") or line.startswith("S"):
+        line_result = convert_LD_ST(line)
+    elif line.startswith("JUMP"):
+        line_result = convert_JUMP(line)
+    elif line.startswith("C"):
+        line_result = convert_CMP(line)
+    double_zero = "00"
+    line_result = line_result + double_zero
+    hex_result = ""
+    for i in range(0, len(line_result), 4):
+        partial = line_result[i : i + 4]
+        hex_result += hex(int(partial, 2))[2:]
+    output_file.write(hex_result + "\n")
+
+    print(line_result)
+    print(hex_result)
