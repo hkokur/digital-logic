@@ -63,15 +63,15 @@ def generate_negative(num):
     return "".join(bit_representation)
 
 
-def convert_imm(immediate):
-    immediate_length = 6
+def convert_imm(immediate, width):
+    immediate_width = width
     result = ""
     if int(immediate) >= 0:
-        result += bin(int(immediate))[2:].zfill(6)
+        result += bin(int(immediate))[2:].zfill(width)
     else:
         # negative value
         result += (
-            immediate_length - len(generate_negative(int(immediate)))
+            immediate_width - len(generate_negative(int(immediate)))
         ) * "1" + generate_negative(int(immediate))
     return result
 
@@ -80,6 +80,7 @@ def convert_ADD_ADDI_AND_ANDI_NAND_NOR(instruction):
     # get the operation
     operation = get_operation(instruction)
     result = ""
+    # set the operation opcodes
     if operation == "ADD":
         result += "0000"
     elif operation == "ADDI":
@@ -97,7 +98,7 @@ def convert_ADD_ADDI_AND_ANDI_NAND_NOR(instruction):
         registers = get_registers(instruction)
         result += convert_register(registers[0])
         result += convert_register(registers[1])
-        result += convert_imm(registers[2])
+        result += convert_imm(registers[2], 6)
     else:
         registers = get_registers(instruction)
         result += convert_register(registers[0])
@@ -105,6 +106,27 @@ def convert_ADD_ADDI_AND_ANDI_NAND_NOR(instruction):
         result += convert_register(registers[2])
         result += "00"
     # check the size
+    return result
+
+
+def convert_JE_JA_JB_JAE_JBE(instruction):
+    operation = get_operation(instruction)
+    result = ""
+    # set the operation opcdoes
+    if operation == "JE":
+        result += "1010"
+    elif operation == "JA":
+        result += "1011"
+    elif operation == "JB":
+        result += "1100"
+    elif operation == "JAE":
+        result += "1101"
+    elif operation == "JBE":
+        result += "1110"
+
+    value = get_registers(instruction)[0]
+    result += convert_imm(value, 10)
+    result += "0000"
     return result
 
 
@@ -120,17 +142,6 @@ def convert_CMP():
     pass
 
 
-def convert_JE():
-    pass
-
-
-def convert_JA():
-    pass
-
-
-def convert_JB():
-    pass
-
-
 l = read_file("input.txt")
 print(convert_ADD_ADDI_AND_ANDI_NAND_NOR(l[1]))
+print(convert_JE_JA_JB_JAE_JBE(l[4]))
