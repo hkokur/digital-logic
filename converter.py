@@ -135,7 +135,7 @@ def convert_LD_ST(instruction: str) -> str:
     result = ""
     if operation == "LD":
         result += "0111"
-    elif operation == "St":
+    elif operation == "ST":
         result += "1000"
 
     registers = get_registers(instruction)
@@ -169,7 +169,7 @@ for line in read_file("input.txt"):
     line_result = ""
     if line.startswith("A") or line.startswith("N"):
         line_result = convert_ADD_ADDI_AND_ANDI_NAND_NOR(line)
-    elif line.startswith("J") and line != "JUMP":
+    elif line.startswith("J") and not line.startswith("JUMP"):
         line_result = convert_JE_JA_JB_JAE_JBE(line)
     elif line.startswith("L") or line.startswith("S"):
         line_result = convert_LD_ST(line)
@@ -184,6 +184,3 @@ for line in read_file("input.txt"):
         partial = line_result[i : i + 4]
         hex_result += hex(int(partial, 2))[2:]
     output_file.write(hex_result + "\n")
-
-    print(line_result)
-    print(hex_result)
