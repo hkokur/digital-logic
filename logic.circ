@@ -82,22 +82,24 @@
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <wire from="(360,270)" to="(360,350)"/>
-    <wire from="(210,460)" to="(310,460)"/>
+    <wire from="(410,610)" to="(540,610)"/>
+    <wire from="(170,610)" to="(270,610)"/>
     <comp loc="(400,100)" name="registerFile"/>
-    <comp lib="4" loc="(450,460)" name="ROM">
+    <comp loc="(170,610)" name="Program_Counter"/>
+    <comp loc="(720,240)" name="Arıthmetıc_Logic_Unit"/>
+    <comp lib="0" loc="(360,350)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="label" val="Clock"/>
+    </comp>
+    <comp loc="(780,550)" name="FSM"/>
+    <comp lib="4" loc="(410,610)" name="ROM">
       <a name="addrWidth" val="10"/>
       <a name="dataWidth" val="18"/>
       <a name="contents">addr/data: 10 18
 0
 </a>
     </comp>
-    <comp loc="(210,460)" name="Program_Counter"/>
-    <comp lib="0" loc="(360,350)" name="Tunnel">
-      <a name="facing" val="north"/>
-      <a name="label" val="Clock"/>
-    </comp>
-    <comp loc="(590,420)" name="CPU"/>
-    <comp loc="(810,440)" name="FSM"/>
+    <comp loc="(580,490)" name="CPU"/>
   </circuit>
   <circuit name="NAND">
     <a name="circuit" val="NAND"/>
@@ -1602,7 +1604,7 @@
   </circuit>
   <circuit name="CPU">
     <a name="circuit" val="CPU"/>
-    <a name="clabel" val=""/>
+    <a name="clabel" val="CPU"/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <appear>
@@ -1612,7 +1614,7 @@
       <text font-family="SansSerif" font-size="9" text-anchor="middle" x="206" y="62">is_add</text>
       <text font-family="SansSerif" font-size="9" text-anchor="middle" x="208" y="93">is_imm</text>
       <text font-family="SansSerif" font-size="9" text-anchor="middle" x="199" y="124">sr2</text>
-      <text font-family="SansSerif" font-size="9" text-anchor="middle" x="208" y="154">sr1/op1</text>
+      <text font-family="SansSerif" font-size="9" text-anchor="middle" x="208" y="154">sr1/op2</text>
       <text font-family="SansSerif" font-size="9" text-anchor="middle" x="205" y="183">is_alu</text>
       <text font-family="SansSerif" font-size="9" text-anchor="middle" x="210" y="213">address</text>
       <text font-family="SansSerif" font-size="9" text-anchor="middle" x="211" y="243">dr/sr/op2</text>
@@ -3361,7 +3363,7 @@
   </circuit>
   <circuit name="Arıthmetıc_Logic_Unit">
     <a name="circuit" val="Arıthmetıc_Logic_Unit"/>
-    <a name="clabel" val=""/>
+    <a name="clabel" val="ALU"/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <wire from="(600,390)" to="(720,390)"/>
